@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useCallback } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
+import { Form } from '@unform/mobile';
+import { FormHandles } from '@unform/core';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -22,6 +24,11 @@ import {
 
 const SignUp: React.FC = () => {
   const navigation = useNavigation();
+  const formRef = useRef<FormHandles>(null);
+
+  const handleSignUp = useCallback((data: object) => {
+    console.log(data);
+  }, []);
 
   return (
     <>
@@ -39,13 +46,15 @@ const SignUp: React.FC = () => {
             <View>
               <Title>Create Account</Title>
             </View>
-            <Input name="name" icon="user" placeholder="Name" />
+            <Form ref={formRef} onSubmit={handleSignUp}>
+              <Input name="name" icon="user" placeholder="Name" />
 
-            <Input name="email" icon="mail" placeholder="E-mail" />
-            <Input name="password" icon="lock" placeholder="Password" />
+              <Input name="email" icon="mail" placeholder="E-mail" />
+              <Input name="password" icon="lock" placeholder="Password" />
+            </Form>
             <Button
               onPress={() => {
-                console.log('a');
+                formRef.current?.submitForm();
               }}
             >
               Enter
