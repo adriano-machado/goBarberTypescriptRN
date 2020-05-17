@@ -14,6 +14,7 @@ import * as Yup from 'yup';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 
+import api from '../../services/api';
 import getValidationError from '../../utils/getValidationErros';
 
 import Input from '../../components/Input';
@@ -38,42 +39,41 @@ const SignUp: React.FC = () => {
   const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
 
-  const handleSignUp = useCallback(async (data: SignInFormData) => {
-    try {
-      formRef.current?.setErrors({});
+  const handleSignUp = useCallback(
+    async (data: SignInFormData) => {
+      try {
+        formRef.current?.setErrors({});
 
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Name is mandatory'),
-        email: Yup.string()
-          .required('E-mail is mandatory')
-          .email('You must enter a valid e-mail'),
-        password: Yup.string().min(6, 'At least 6 digits'),
-      });
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Name is mandatory'),
+          email: Yup.string()
+            .required('E-mail is mandatory')
+            .email('You must enter a valid e-mail'),
+          password: Yup.string().min(6, 'At least 6 digits'),
+        });
 
-      await schema.validate(data, {
-        abortEarly: false,
-      });
+        await schema.validate(data, {
+          abortEarly: false,
+        });
 
-      /*       await api.post('/users', data);
-       */ Alert.alert(
-        'Error on create account',
-        'An error has ocurred, try again',
-      );
-
-      /*       addToast({
-        type: 'success',
-        title: 'Sign up success!',
-        description: 'You are ready to login on GoBarber!',
-      }); */
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationError(err);
-        formRef.current?.setErrors(errors);
-        return;
+        await api.post('/users', data);
+        Alert.alert('Sign up success!', 'You are ready to login on GoBarber!');
+        navigation.navigate('SignIn');
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationError(err);
+          formRef.current?.setErrors(errors);
+          return;
+        }
+        console.log(err);
+        Alert.alert(
+          'Error on create account',
+          'An error has ocurred, try again',
+        );
       }
-      Alert.alert('Error on create account', 'An error has ocurred, try again');
-    }
-  }, []);
+    },
+    [navigation],
+  );
 
   return (
     <>
