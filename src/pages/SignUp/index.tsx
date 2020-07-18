@@ -68,7 +68,7 @@ const SignUp: React.FC = () => {
         console.log(err);
         Alert.alert(
           'Error on create account',
-          'An error has ocurred, try again',
+          'An error has occurred, try again',
         );
       }
     },

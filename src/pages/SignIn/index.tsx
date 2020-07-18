@@ -64,7 +64,7 @@ const SignIn: React.FC = () => {
         }
         Alert.alert(
           'Error to authenticate',
-          'An error has ocurred, check credentials',
+          'An error has occurred, check credentials',
         );
       }
     },
