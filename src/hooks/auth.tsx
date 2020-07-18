@@ -24,6 +24,8 @@ interface SignCredentials {
 }
 interface AuthContextData {
   signOut(): void;
+  updateUser(user: User): Promise<void>;
+
   signIn(credentials: SignCredentials): Promise<void>;
   user: User;
   loading: boolean;
@@ -72,8 +74,22 @@ export const AuthProvider: React.FC = ({ children }) => {
     await AsyncStorage.multiRemove(['@Gobarber:token', '@Gobarber:user']);
     setData({} as AuthState);
   }, []);
+
+  const updateUser = useCallback(
+    async (user: User) => {
+      await AsyncStorage.setItem('@Gobarber:user', JSON.stringify(user));
+
+      setData({
+        token: data.token,
+        user,
+      });
+    },
+    [setData, data.token],
+  );
   return (
-    <AuthContext.Provider value={{ user: data.user, signIn, signOut, loading }}>
+    <AuthContext.Provider
+      value={{ user: data.user, signIn, signOut, loading, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

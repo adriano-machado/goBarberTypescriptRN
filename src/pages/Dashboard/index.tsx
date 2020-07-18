@@ -36,7 +36,6 @@ const Dashboard: React.FC = () => {
       const response = await api.get('providers');
       setProviders(response.data);
     }
-    // signOut();
     loadProviders();
   }, []);
   const navigationToProfile = useCallback(() => {
@@ -57,7 +56,13 @@ const Dashboard: React.FC = () => {
           <UserName>{user.name}</UserName>
         </HeaderTitle>
         <ProfileButton onPress={navigationToProfile}>
-          <UserAvatar source={{ uri: user.avatar_url }} />
+          <UserAvatar
+            source={{
+              uri:
+                user.avatar_url ||
+                'https://api.adorable.io/avatars/285/abott@adorable.png',
+            }}
+          />
         </ProfileButton>
       </Header>
       <ProvidersList
@@ -68,7 +73,13 @@ const Dashboard: React.FC = () => {
           <ProviderContainer
             onPress={() => navigationToCreateAppointment(provider.id)}
           >
-            <ProviderAvatar source={{ uri: provider.avatar_url }} />
+            <ProviderAvatar
+              source={{
+                uri:
+                  provider.avatar_url ||
+                  'https://api.adorable.io/avatars/285/abott@adorable.png',
+              }}
+            />
             <ProviderInfo>
               <ProviderName>{provider.name}</ProviderName>
               <ProviderMeta>
