@@ -8,6 +8,8 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
+import ImagePicker from 'react-native-image-picker';
+
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
 import { Form } from '@unform/mobile';
@@ -43,7 +45,39 @@ const Profile: React.FC = () => {
   const passwordInputRef = useRef<TextInput>(null);
   const oldPasswordInputRef = useRef<TextInput>(null);
   const confirmPasswordInputRef = useRef<TextInput>(null);
+  const handleUpdateAvatar = useCallback(() => {
+    ImagePicker.showImagePicker(
+      {
+        title: 'Select Avatar',
+        cancelButtonTitle: 'Cancel',
+        takePhotoButtonTitle: 'Use camera',
+      },
+      async response => {
+        try {
+          if (response.didCancel) {
+            return;
+          }
+          if (response.error) {
+            console.log(response.error);
+            Alert.alert('Error to update your avatar');
+            return;
+          }
 
+          const data = new FormData();
+          data.append('avatar', {
+            uri: response.uri,
+            name: `${user.id}.jpg`,
+            type: 'image/jpeg',
+          });
+
+          const userUpdatedResponse = await api.patch('users/avatar', data);
+          updateUser(userUpdatedResponse.data);
+        } catch (err) {
+          console.log(err);
+        }
+      },
+    );
+  }, [user, updateUser]);
   const handleSignUp = useCallback(
     async (data: ProfileFormData) => {
       try {
@@ -100,7 +134,7 @@ const Profile: React.FC = () => {
         );
       }
     },
-    [navigation],
+    [navigation, updateUser],
   );
 
   const handleGoBack = useCallback(() => {
@@ -121,7 +155,7 @@ const Profile: React.FC = () => {
             <BackButton onPress={handleGoBack}>
               <Icon name="chevron-left" size={24} color="#999591" />
             </BackButton>
-            <UserAvatarButton>
+            <UserAvatarButton onPress={handleUpdateAvatar}>
               <UserAvatar
                 source={{
                   uri:
