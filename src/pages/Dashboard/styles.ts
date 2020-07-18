@@ -8,12 +8,12 @@ export const Container = styled.View`
   flex: 1;
 `;
 export const Header = styled.View`
-  padding: 24px;
+  padding: 20px 24px;
   padding-top: ${getStatusBarHeight() + 24}px;
   background: #28262e;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 `;
 export const HeaderTitle = styled.Text`
   color: #f4ede8;
@@ -26,10 +26,23 @@ export const UserName = styled.Text`
   font-family: 'RobotoSlab-Medium';
 `;
 
+export const HeaderInfoContainer = styled.View``;
+
+export const LogoutButton = styled.TouchableOpacity`
+  align-self: flex-start;
+  margin-bottom: -10px;
+`;
+
+export const LogoutButtonText = styled.Text`
+  color: #de5b50;
+  font-family: 'RobotoSlab-Medium';
+  font-size: 14px;
+`;
+
 export const UserAvatar = styled.Image`
-  width: 56px;
-  height: 56px;
-  border-radius: 28px;
+  width: 96px;
+  height: 96px;
+  border-radius: 48px;
 `;
 export const ProfileButton = styled.TouchableOpacity``;
 
